@@ -1,5 +1,9 @@
 #include "type.h"
 
+/*int getSize(Type* type){
+    return sizeof(Type);
+}*/
+
 Type::Type(ValueType valueType) {
     this->type = valueType;
 }

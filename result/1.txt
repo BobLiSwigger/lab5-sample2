@@ -1,0 +1,94 @@
+lno@0	@0	program	children: [@1 ]
+lno@2	@1	stmt	declration	children: [@2 @3 @4 @8 @11 @14 @17 @21 @86 ]
+lno@2	@2	type	void	
+lno@2	@3	vari	main	0	
+lno@3	@4	stmt	declration	children: [@5 @6 @7 ]
+lno@3	@5	type	int 	
+lno@3	@6	vari	a	1	
+lno@3	@7	vari	s	2	
+lno@4	@8	expr	=	children: [@9 @10 ]
+lno@4	@9	vari	a	1	
+lno@4	@10	const	10	
+lno@5	@11	expr	=	children: [@12 @13 ]
+lno@5	@12	vari	s	2	
+lno@5	@13	const	0	
+lno@6	@14	stmt	declration	children: [@15 @16 ]
+lno@6	@15	type	char	
+lno@6	@16	vari	ch	3	
+lno@7	@17	stmt	scanf	children: [@18 @19 ]
+lno@7	@18	const	"%d"	
+lno@7	@19	expr	&	children: [@20 ]
+lno@7	@20	vari	ch	3	
+lno@8	@21	stmt	while	children: [@22 @40 @43 @46 @49 @52 ]
+lno@8	@22	expr	||	children: [@23 @30 ]
+lno@8	@23	expr	&&	children: [@24 @27 ]
+lno@8	@24	expr	>	children: [@25 @26 ]
+lno@8	@25	vari	a	1	
+lno@8	@26	const	0	
+lno@8	@27	expr	<=	children: [@28 @29 ]
+lno@8	@28	vari	a	1	
+lno@8	@29	const	10	
+lno@8	@30	expr	&&	children: [@31 @36 ]
+lno@8	@31	expr	==	children: [@32 @35 ]
+lno@8	@32	expr	%	children: [@33 @34 ]
+lno@8	@33	vari	a	1	
+lno@8	@34	const	100	
+lno@8	@35	const	10	
+lno@8	@36	expr	==	children: [@37 @39 ]
+lno@8	@37	expr	!	children: [@38 ]
+lno@8	@38	vari	a	1	
+lno@8	@39	const	10	
+lno@9	@40	expr	-=	children: [@41 @42 ]
+lno@9	@41	vari	a	1	
+lno@9	@42	const	1	
+lno@10	@43	stmt	declration	children: [@44 @45 ]
+lno@10	@44	type	int 	
+lno@10	@45	vari	a	1	
+lno@11	@46	expr	=	children: [@47 @48 ]
+lno@11	@47	vari	a	1	
+lno@11	@48	const	10	
+lno@12	@49	expr	+=	children: [@50 @51 ]
+lno@12	@50	vari	s	2	
+lno@12	@51	vari	a	1	
+lno@20	@52	stmt	if	children: [@53 @58 @61 @64 @67 ]
+lno@13	@53	expr	<	children: [@54 @56 ]
+lno@13	@54	expr	-	children: [@55 ]
+lno@13	@55	vari	s	2	
+lno@13	@56	expr	-	children: [@57 ]
+lno@13	@57	const	10	
+lno@14	@58	stmt	printf	children: [@59 @60 ]
+lno@14	@59	const	"result is: %d\n"	
+lno@14	@60	vari	s	2	
+lno@15	@61	stmt	declration	children: [@62 @63 ]
+lno@15	@62	type	int 	
+lno@15	@63	vari	b	4	
+lno@16	@64	expr	=	children: [@65 @66 ]
+lno@16	@65	vari	b	4	
+lno@16	@66	const	10	
+lno@17	@67	stmt	for	children: [@68 @73 @76 @78 @83 ]
+lno@17	@68	stmt	declration	children: [@79 @80 ]
+lno@17	@79	type	int 	
+lno@17	@80	expr	=	children: [@81 @82 ]
+lno@17	@81	vari	i	5	
+lno@17	@82	const	0	
+lno@17	@73	expr	<	children: [@74 @75 ]
+lno@17	@74	vari	i	5	
+lno@17	@75	vari	b	4	
+lno@17	@76	expr	++	children: [@77 ]
+lno@17	@77	vari	i	5	
+lno@17	@78	stmt	declration	children: [@79 @80 ]
+lno@17	@79	type	int 	
+lno@17	@80	expr	=	children: [@81 @82 ]
+lno@17	@81	vari	i	5	
+lno@17	@82	const	0	
+lno@18	@83	stmt	printf	children: [@84 @85 ]
+lno@18	@84	const	"Have fun: %d\n"	
+lno@18	@85	vari	i	5	
+lno@22	@86	stmt	return	
+Symbol Table
+0	main
+1	a
+2	s
+3	ch
+4	b
+5	i

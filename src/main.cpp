@@ -2,6 +2,8 @@
 #include <fstream>
 
 extern TreeNode *root;
+extern std::vector<std::string> symTable;
+extern std::vector<int> symStack;
 extern FILE *yyin;
 extern int yyparse();
 
@@ -22,8 +24,12 @@ int main(int argc, char *argv[])
     }
     yyparse();
     if(root != NULL) {
-        root->genNodeId();
+        root->genNodeId(0);
         root->printAST();
+        cout<<"Symbol Table"<<endl;
+        for (long unsigned int i = 0; i < symTable.size(); i = i + 1){
+            cout<<i<<"\t"<<symTable[i]<<endl;
+        }
     }
     return 0;
 }

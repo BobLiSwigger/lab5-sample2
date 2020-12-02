@@ -5,6 +5,7 @@ using namespace std;
 
 enum ValueType
 {
+    VALUE_VOID = 1,
     VALUE_BOOL,
     VALUE_INT,
     VALUE_CHAR,
@@ -34,11 +35,12 @@ public:
 };
 
 // 设置几个常量Type，可以节省空间开销
+static Type* TYPE_VOID = new Type(VALUE_VOID);
 static Type* TYPE_INT = new Type(VALUE_INT);
 static Type* TYPE_CHAR = new Type(VALUE_CHAR);
 static Type* TYPE_BOOL = new Type(VALUE_BOOL);
 static Type* TYPE_STRING = new Type(VALUE_STRING);
 
-int getSize(Type* type);
+//int getSize(Type* type);
 
 #endif
