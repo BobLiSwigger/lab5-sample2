@@ -1,49 +1,53 @@
 lno@0	@0	program	children: [@1 ]
 lno@2	@1	stmt	declration	children: [@2 @3 @4 @8 @11 @14 @17 @20 @24 ]
 lno@2	@2	type	void	
-lno@2	@3	vari	main	0	
+lno@2	@3	vari	main	ID 0	
 lno@3	@4	stmt	declration	children: [@5 @6 @7 ]
 lno@3	@5	type	int 	
-lno@3	@6	vari	a	1	
-lno@3	@7	vari	s	2	
+lno@3	@6	vari	a	ID 1	
+lno@3	@7	vari	s	ID 2	
 lno@4	@8	expr	=	children: [@9 @10 ]
-lno@4	@9	vari	a	1	
+lno@4	@9	vari	a	ID 1	
 lno@4	@10	const	10	
 lno@5	@11	expr	=	children: [@12 @13 ]
-lno@5	@12	vari	s	2	
+lno@5	@12	vari	s	ID 2	
 lno@5	@13	const	0	
 lno@6	@14	stmt	declration	children: [@15 @16 ]
 lno@6	@15	type	char	
-lno@6	@16	vari	ch	3	
+lno@6	@16	vari	ch	ID 3	
 lno@7	@17	expr	=	children: [@18 @19 ]
-lno@7	@18	vari	a	1	
+lno@7	@18	vari	a	ID 1	
 lno@7	@19	const	"aa"	
 lno@8	@20	stmt	scanf	children: [@21 @22 ]
 lno@8	@21	const	"%d"	
 lno@8	@22	expr	&	children: [@23 ]
-lno@8	@23	vari	ch	3	
+lno@8	@23	vari	ch	ID 3	
 lno@9	@24	stmt	while	children: [@25 @43 ]
 lno@9	@25	expr	||	children: [@26 @33 ]
 lno@9	@26	expr	&&	children: [@27 @30 ]
 lno@9	@27	expr	>	children: [@28 @29 ]
-lno@9	@28	vari	a	1	
+lno@9	@28	vari	a	ID 1	
 lno@9	@29	const	0	
 lno@9	@30	expr	<=	children: [@31 @32 ]
-lno@9	@31	vari	a	1	
+lno@9	@31	vari	a	ID 1	
 lno@9	@32	const	10	
 lno@9	@33	expr	&&	children: [@34 @39 ]
 lno@9	@34	expr	==	children: [@35 @38 ]
 lno@9	@35	expr	%	children: [@36 @37 ]
-lno@9	@36	vari	a	1	
+lno@9	@36	vari	a	ID 1	
 lno@9	@37	const	100	
 lno@9	@38	const	10	
 lno@9	@39	expr	==	children: [@40 @42 ]
 lno@9	@40	expr	!	children: [@41 ]
-lno@9	@41	vari	a	1	
+lno@9	@41	vari	a	ID 1	
 lno@9	@42	const	10	
 lno@10	@43	stmt	SEMICOLON	
+Yields
+0	-1
+1	0
+2	1
 Symbol Table
-0	main
-1	a
-2	s
-3	ch
+0	main	0
+1	a	1
+2	s	1
+3	ch	1

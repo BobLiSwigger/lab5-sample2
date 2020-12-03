@@ -1,4 +1,89 @@
 #include "tree.h"
+
+yieldNode::yieldNode(int father){
+    this->father = father;
+}
+
+Yields::Yields(){
+    if (this->yields.size() == 0){
+        this->newYield(-1);
+    }
+}
+
+int Yields::newYield(int father){
+    if ((long unsigned int)father >= this->yields.size() && this->yields.size() != 0){
+        return -1;
+    }
+    struct yieldNode *yield = new yieldNode(father);
+    yield->symbols = NULL;
+    this->yields.emplace_back(*(yield));
+    //delete yield;
+    return this->yields.size() - 1;
+}
+
+struct Symbol * Yields::ifExists(int curYield, std::string name, int * diff){
+    int yieldDiff = 1;
+    /*遍历当前域和父域*/
+    for (; curYield >= 0; curYield = this->yields[curYield].father){
+        /*遍历域中符号表*/
+        for (struct Symbol * symbol = this->yields[curYield].symbols; symbol != NULL; symbol = symbol->next){
+            if (symbol->name == name){
+                if (diff != NULL){
+                    *diff = yieldDiff;
+                }
+                return symbol;
+            }
+        }
+        yieldDiff = yieldDiff + 1;
+    }
+    return NULL;
+}
+
+struct Symbol * Yields::addSym(int curYield, std::string name){
+    if (this->yields[curYield].symbols == NULL){
+        this->yields[curYield].symbols = (struct Symbol *)malloc(sizeof(struct Symbol));
+        this->yields[curYield].symbols->next = NULL;
+        this->yields[curYield].symbols->name = name;
+        return this->yields[curYield].symbols;
+    }
+    else{
+        struct Symbol * symbol;
+        for (symbol = this->yields[curYield].symbols; symbol->next != NULL; symbol = symbol->next){
+            ;
+        }
+        symbol->next = (struct Symbol *)malloc(sizeof(struct Symbol));
+        symbol = symbol->next;
+        symbol->next = NULL;
+        symbol->name = name;
+        return symbol;
+    }
+}
+
+void Yields::genSymID(int ID){
+    for(long unsigned int i = 0; i < this->yields.size(); i = i + 1){
+        for (struct Symbol * symbol = this->yields[i].symbols; symbol != NULL; symbol = symbol->next){
+            symbol->ID = ID;
+            ID = ID + 1;
+        }
+    }
+}
+
+void Yields::printYield(){
+    for (long unsigned int i = 0; i < this->yields.size(); i = i + 1){
+        cout<<i<<"\t"<<this->yields[i].father<<endl;
+    }
+}
+
+void Yields::printSymTable(){
+    for(long unsigned int i = 0; i < this->yields.size(); i = i + 1){
+        for (struct Symbol * symbol = this->yields[i].symbols; symbol != NULL; symbol = symbol->next){
+            cout<<symbol->ID<<"\t";
+            cout<<symbol->name<<"\t";
+            cout<<i<<endl;
+        }
+    }
+}
+
 void TreeNode::addChild(TreeNode* child) {
     TreeNode * curNode = this;
 
@@ -98,7 +183,9 @@ void TreeNode::printSpecialInfo() {
             break;
         case NODE_VAR:
             cout<<this->var_name<<"\t";
-            cout<<this->var_p<<"\t";
+            if (this->symbol_p != NULL){
+                cout<<"ID "<<this->symbol_p->ID<<"\t";
+            }
             break;
         case NODE_EXPR:
             if (this->optype == OP_NOT){

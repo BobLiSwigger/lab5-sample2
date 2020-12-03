@@ -2,8 +2,7 @@
     #include "common.h"
     #define YYSTYPE TreeNode *  
     TreeNode* root;
-    std::vector<std::string> symTable;
-    std::vector<int> symStack;
+    struct Yields progYields;
     extern int lineno;
     int yylex();
     int yyerror( char const * );
@@ -66,15 +65,38 @@ statement
 ;
 
 declaration
-: T IDENTIFIER LP RP LB statements RB {$$ = new TreeNode($1->lineno, NODE_STMT);
+: T decl_exprs SEMICOLON {$$ = new TreeNode($1->lineno, NODE_STMT);
+                          $$->stype = STMT_DECL;
+                          $$->addChild($1);
+                          $$->addChild($2);} 
+| T IDENTIFIER LP RP LB statements RB {/*int diff;*/
+                                       /*struct Symbol * lastSymbol = progYields.ifExists($2->yield_offset, $2->var_name, &diff);*/
+                                       struct Symbol * curSymbol = progYields.addSym($2->yield_offset, $2->var_name);
+                                       $2->symbol_p = curSymbol;
+                                       $$ = new TreeNode($1->lineno, NODE_STMT);
                                        $$->stype = STMT_DECL;
                                        $$->addChild($1);
                                        $$->addChild($2);
                                        $$->addChild($6);}
-| T exprs SEMICOLON {$$ = new TreeNode($1->lineno, NODE_STMT);
-                     $$->stype = STMT_DECL;
-                     $$->addChild($1);
-                     $$->addChild($2);} 
+;
+
+decl_exprs
+: decl_expr {$$ = $1;}
+| decl_exprs COMMA decl_expr {$$ = $1; $$->addSibling($3);}
+;
+
+decl_expr
+: IDENTIFIER {$$ = $1;
+              /*int diff;*/
+              /*struct Symbol * lastSymbol = progYields.ifExists($$->yield_offset, $$->var_name, &diff);*/
+              $$->symbol_p = progYields.addSym($$->yield_offset, $$->var_name);}
+| IDENTIFIER LOP_ASSIGN expr {/*int diff;*/
+                              /*struct Symbol * lastSymbol = progYields.ifExists($1->yield_offset, $1->var_name, &diff);*/
+                              $1->symbol_p = progYields.addSym($1->yield_offset, $1->var_name);
+                              $$ = new TreeNode(lineno, NODE_EXPR); 
+                              $$->optype = OP_ASSIGN;
+                              $$->addChild($1); 
+                              $$->addChild($3);}
 ;
 
 exprs
@@ -172,6 +194,10 @@ expr
 VALUE
 : IDENTIFIER {
     $$ = $1;
+    struct Symbol * symbol = progYields.ifExists($$->yield_offset, $$->var_name, NULL);
+    if (symbol != NULL){
+        $$->symbol_p = symbol;
+    }
 }
 | INTEGER {
     $$ = $1;

@@ -5,6 +5,34 @@
 #include "type.h"
 #include "utility.h"
 
+struct Symbol{
+public:
+    uint32_t ID;
+    std::string name;
+    struct Symbol * next;
+};
+
+struct yieldNode{
+public:
+    int father;
+    struct Symbol * symbols;
+public:
+    yieldNode(int);
+};
+
+struct Yields{
+public:
+    std::vector<struct yieldNode> yields;
+public:
+    Yields();
+    int newYield(int);
+    struct Symbol * ifExists(int, std::string name, int *);
+    struct Symbol * addSym(int, std::string name);
+    void genSymID(int);
+    void printYield();
+    void printSymTable();
+};
+
 enum NodeType
 {
     NODE_CONST = 1, 
@@ -92,7 +120,9 @@ public:
     bool b_val;
     string str_val;
     string var_name;
-    int var_p;
+
+    int yield_offset; /*作用域偏移量*/
+    struct Symbol *symbol_p; /*符号表指针*/
 
 public:
     static string nodeType2String (NodeType type);

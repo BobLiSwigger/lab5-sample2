@@ -519,9 +519,9 @@ char *yytext;
 #line 3 "src/main.l"
 #include "common.h"
 #include "main.tab.h"  // yacc header
-extern std::vector<std::string> symTable;
-extern std::vector<int> symStack;
+extern struct Yields progYields;
 int lineno=1;
+int curYield = 0;
 #line 526 "src/main.l.yy.cpp"
 #line 527 "src/main.l.yy.cpp"
 
@@ -1019,19 +1019,18 @@ YY_RULE_SETUP
 case 43:
 YY_RULE_SETUP
 #line 81 "src/main.l"
-{symStack.push_back(-1);
+{curYield = progYields.newYield(curYield);
      return LB;}
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
 #line 83 "src/main.l"
-{for (;symStack[symStack.size()-1] >= 0;symStack.pop_back());
-     symStack.pop_back();
+{curYield = progYields.yields[curYield].father;
      return RB;}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 87 "src/main.l"
+#line 86 "src/main.l"
 {
     TreeNode* node = new TreeNode(lineno, NODE_CONST);
     node->type = TYPE_INT;
@@ -1042,7 +1041,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 95 "src/main.l"
+#line 94 "src/main.l"
 {
     TreeNode* node = new TreeNode(lineno, NODE_CONST);
     node->type = TYPE_CHAR;
@@ -1053,57 +1052,39 @@ YY_RULE_SETUP
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 103 "src/main.l"
+#line 102 "src/main.l"
 {
     TreeNode* node = new TreeNode(lineno, NODE_VAR);
-    long int p;
-    /*查找已经存在的最近变量*/
-    for (p = symStack.size() - 1; p >= 0; p = p - 1){
-        /*判断不是边界*/
-        if (symStack[p] >= 0){
-            /*如果已经声明*/
-            if (symTable[symStack[p]] == string(yytext)){
-                break;
-            }
-        }
-    }
-    if (p < 0){
-        symTable.push_back(string(yytext));
-        symStack.push_back(symTable.size() - 1);
-        node->var_p = symTable.size() - 1;
-    }
-    else{
-        node->var_p = symStack[p];
-    }
     node->var_name = string(yytext);
+    node->yield_offset = curYield;
     yylval = node;
     return IDENTIFIER;
 }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 129 "src/main.l"
+#line 110 "src/main.l"
 /* do nothing */
 	YY_BREAK
 case 49:
 /* rule 49 can match eol */
 YY_RULE_SETUP
-#line 131 "src/main.l"
+#line 112 "src/main.l"
 lineno++;
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 133 "src/main.l"
+#line 114 "src/main.l"
 {
     cerr << "[line "<< lineno <<" ] unknown character:" << yytext << endl;
 }
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 136 "src/main.l"
+#line 117 "src/main.l"
 ECHO;
 	YY_BREAK
-#line 1107 "src/main.l.yy.cpp"
+#line 1088 "src/main.l.yy.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2071,5 +2052,5 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 136 "src/main.l"
+#line 117 "src/main.l"
 

@@ -24,6 +24,9 @@ main: src/pch.h.gch
 
 run: lex yacc main
 
+debug: lex yacc src/pch.h.gch
+	$(CC) $(CFLAGS) -g $(shell ls ./src/*.cpp) -o ./bin/main
+
 clean:
 	rm -f src/*.output src/main.lex.yy.cpp src/main.tab.cpp src/main.tab.h src/main.output src/pch.h.gch $(TARGET) *.o ./bin/* 
 

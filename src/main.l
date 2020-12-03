@@ -2,9 +2,9 @@
 %{
 #include "common.h"
 #include "main.tab.h"  // yacc header
-extern std::vector<std::string> symTable;
-extern std::vector<int> symStack;
+extern struct Yields progYields;
 int lineno=1;
+int curYield = 0;
 %}
 BLOCKCOMMENT \/\*([^\*^\/]*|[\*^\/*]*|[^\**\/]*)*\*\/
 LINECOMMENT \/\/[^\n]*
@@ -78,10 +78,9 @@ IDENTIFIER [[:alpha:]_][[:alpha:][:digit:]_]*
 ")" {return RP;}
 "[" {return LBCT;}
 "]" {return RBCT;}
-"{" {symStack.push_back(-1);
+"{" {curYield = progYields.newYield(curYield);
      return LB;}
-"}" {for (;symStack[symStack.size()-1] >= 0;symStack.pop_back());
-     symStack.pop_back();
+"}" {curYield = progYields.yields[curYield].father;
      return RB;}
 
 {INTEGER} {
@@ -102,26 +101,8 @@ IDENTIFIER [[:alpha:]_][[:alpha:][:digit:]_]*
 
 {IDENTIFIER} {
     TreeNode* node = new TreeNode(lineno, NODE_VAR);
-    long int p;
-    /*查找已经存在的最近变量*/
-    for (p = symStack.size() - 1; p >= 0; p = p - 1){
-        /*判断不是边界*/
-        if (symStack[p] >= 0){
-            /*如果已经声明*/
-            if (symTable[symStack[p]] == string(yytext)){
-                break;
-            }
-        }
-    }
-    if (p < 0){
-        symTable.push_back(string(yytext));
-        symStack.push_back(symTable.size() - 1);
-        node->var_p = symTable.size() - 1;
-    }
-    else{
-        node->var_p = symStack[p];
-    }
     node->var_name = string(yytext);
+    node->yield_offset = curYield;
     yylval = node;
     return IDENTIFIER;
 }
