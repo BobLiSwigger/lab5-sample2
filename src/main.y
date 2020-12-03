@@ -12,7 +12,7 @@
 
 %token IF WHILE FOR RETURN PRINTF SCANF
 
-%token T_CHAR T_INT T_STRING T_BOOL T_VOID
+%token T_CHAR T_INT T_STRING T_BOOL T_VOID T_CONST
 
 %token SEMICOLON COMMA
 
@@ -60,7 +60,6 @@ statement
                                                             $$->addChild($3);
                                                             $$->addChild($4);
                                                             $$->addChild($6);
-                                                            $$->addChild($3);
                                                             $$->addChild($9);}
 ;
 
@@ -214,6 +213,9 @@ T: T_INT {$$ = new TreeNode(lineno, NODE_TYPE); $$->type = TYPE_INT;}
 | T_CHAR {$$ = new TreeNode(lineno, NODE_TYPE); $$->type = TYPE_CHAR;}
 | T_BOOL {$$ = new TreeNode(lineno, NODE_TYPE); $$->type = TYPE_BOOL;}
 | T_VOID {$$ = new TreeNode(lineno, NODE_TYPE); $$->type = TYPE_VOID;}
+| T_CONST T_INT {$$ = new TreeNode(lineno, NODE_TYPE); $$->type = TYPE_INT; $$->isConst = true;} 
+| T_CONST T_CHAR {$$ = new TreeNode(lineno, NODE_TYPE); $$->type = TYPE_INT; $$->isConst = true;} 
+| T_CONST T_BOOL {$$ = new TreeNode(lineno, NODE_TYPE); $$->type = TYPE_INT; $$->isConst = true;} 
 ;
 
 %%

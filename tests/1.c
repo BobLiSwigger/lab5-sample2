@@ -1,6 +1,11 @@
 /*
 I'm level 1 test.
 */
+void f() {
+    int a=10;
+    a+=3;
+    return;
+}
 void main() {
     int a, s;
     a = 10;

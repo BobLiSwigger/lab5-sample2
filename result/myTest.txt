@@ -42,11 +42,12 @@ lno@9	@40	expr	!	children: [@41 ]
 lno@9	@41	vari	a	ID 1	
 lno@9	@42	const	10	
 lno@10	@43	stmt	SEMICOLON	
-Yields
+----------------------------Yield----------------------------
 0	-1
 1	0
 2	1
-Symbol Table
+-------------------------Symbol Table-------------------------
+ID	name	yield
 0	main	0
 1	a	1
 2	s	1

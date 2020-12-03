@@ -30,11 +30,12 @@ lno@8	@28	vari	a	ID 0
 lno@8	@29	vari	b	ID 1	
 lno@9	@30	stmt	printf	children: [@31 ]
 lno@9	@31	vari	a	ID 0	
-Yields
+----------------------------Yield----------------------------
 0	-1
 1	0
 2	0
-Symbol Table
+-------------------------Symbol Table-------------------------
+ID	name	yield
 0	a	0
 1	b	0
 2	a	1

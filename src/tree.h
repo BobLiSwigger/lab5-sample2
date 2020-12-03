@@ -123,6 +123,7 @@ public:
 
     int yield_offset; /*作用域偏移量*/
     struct Symbol *symbol_p; /*符号表指针*/
+    bool isConst;
 
 public:
     static string nodeType2String (NodeType type);

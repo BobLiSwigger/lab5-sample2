@@ -69,12 +69,15 @@ void Yields::genSymID(int ID){
 }
 
 void Yields::printYield(){
+    cout<<"----------------------------Yield----------------------------"<<endl;
     for (long unsigned int i = 0; i < this->yields.size(); i = i + 1){
         cout<<i<<"\t"<<this->yields[i].father<<endl;
     }
 }
 
 void Yields::printSymTable(){
+    cout<<"-------------------------Symbol Table-------------------------"<<endl;
+    cout<<"ID\t"<<"name\t"<<"yield\n";
     for(long unsigned int i = 0; i < this->yields.size(); i = i + 1){
         for (struct Symbol * symbol = this->yields[i].symbols; symbol != NULL; symbol = symbol->next){
             cout<<symbol->ID<<"\t";

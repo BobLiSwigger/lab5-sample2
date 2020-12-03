@@ -72,6 +72,7 @@ IDENTIFIER [[:alpha:]_][[:alpha:][:digit:]_]*
 "bool" return T_BOOL;
 "char" return T_CHAR;
 "void" return T_VOID;
+"const" return T_CONST;
 
 
 "(" {return LP;}

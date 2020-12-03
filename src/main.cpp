@@ -26,9 +26,7 @@ int main(int argc, char *argv[])
         root->genNodeId(0);
         progYields.genSymID(0);
         root->printAST();
-        cout<<"Yields"<<endl;
         progYields.printYield();
-        cout<<"Symbol Table"<<endl;
         progYields.printSymTable();
     }
     return 0;

@@ -14,9 +14,10 @@ lno@3	@12	type	int
 lno@3	@13	expr	=	children: [@14 @15 ]
 lno@3	@14	vari	c	ID 2	
 lno@3	@15	const	1	
-Yields
+----------------------------Yield----------------------------
 0	-1
-Symbol Table
+-------------------------Symbol Table-------------------------
+ID	name	yield
 0	a	0
 1	b	0
 2	c	0
