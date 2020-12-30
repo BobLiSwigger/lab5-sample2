@@ -138,6 +138,26 @@ int TreeNode::genNodeId(int startID) {
     return startID;
 }
 
+int TreeNode::allocTypeForDECL(Type* type){
+    
+    if (this->nodeType == NODE_VAR){
+        this->type = type;
+    }
+    return 0;
+}
+
+int TreeNode::typeCheck(Type* type){
+    if (this->type == NULL){
+        printf("Type Error");
+        exit(0);
+    }
+    if (this->type->type != type->type){
+        printf("Type Error");
+        exit(0);
+    }
+    return 1;
+}
+
 void TreeNode::printNodeInfo() {
     cout<<"lno@"<<this->lineno<<"\t";
     cout<<"@"<<this->nodeID<<"\t";

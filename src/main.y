@@ -50,33 +50,35 @@ statement
 | IF LP expr RP LB statements RB {$$ = new TreeNode(lineno, NODE_STMT); 
                                   $$->stype = STMT_IF; 
                                   $$->addChild($3);
-                                  $$->addChild($6);}
+                                  $$->addChild($6);
+                                  $3->typeCheck(TYPE_BOOL);}
 | WHILE LP expr RP LB statements RB {$$ = new TreeNode($3->lineno, NODE_STMT);
                                      $$->stype = STMT_WHILE;
                                      $$->addChild($3);
-                                     $$->addChild($6);}
+                                     $$->addChild($6);
+                                     $3->typeCheck(TYPE_BOOL);}
 | FOR LP statement expr SEMICOLON expr RP LB statements RB {$$ = new TreeNode($3->lineno, NODE_STMT);
                                                             $$->stype = STMT_FOR;
                                                             $$->addChild($3);
                                                             $$->addChild($4);
                                                             $$->addChild($6);
-                                                            $$->addChild($9);}
+                                                            $$->addChild($9);
+                                                            $4->typeCheck(TYPE_BOOL);}
 ;
 
 declaration
 : T decl_exprs SEMICOLON {$$ = new TreeNode($1->lineno, NODE_STMT);
                           $$->stype = STMT_DECL;
-                          $$->addChild($1);
-                          $$->addChild($2);} 
+                          $$->addChild($1); $$->addChild($2);
+                          Type* tempA = $1->type;
+                          $2->allocTypeForDECL(tempA);} 
 | T IDENTIFIER LP RP LB statements RB {/*int diff;*/
                                        /*struct Symbol * lastSymbol = progYields.ifExists($2->yield_offset, $2->var_name, &diff);*/
                                        struct Symbol * curSymbol = progYields.addSym($2->yield_offset, $2->var_name);
                                        $2->symbol_p = curSymbol;
                                        $$ = new TreeNode($1->lineno, NODE_STMT);
                                        $$->stype = STMT_DECL;
-                                       $$->addChild($1);
-                                       $$->addChild($2);
-                                       $$->addChild($6);}
+                                       $$->addChild($1); $$->addChild($2); $$->addChild($6);}
 ;
 
 decl_exprs
@@ -105,11 +107,12 @@ exprs
 
 expr
 : VALUE {$$ = $1;}
+| LP expr RP {$$ = $2;}
 | LOP_PLUSPLUS expr {$$ = new TreeNode(lineno, NODE_EXPR); $$->optype = OP_FRONTPP; $$->addChild($2);}
 | expr LOP_PLUSPLUS {$$ = new TreeNode(lineno, NODE_EXPR); $$->optype = OP_TAILPP; $$->addChild($1);}
 | LOP_SUBSUB expr {$$ = new TreeNode(lineno, NODE_EXPR); $$->optype = OP_FRONTSS; $$->addChild($2);}
 | expr LOP_SUBSUB {$$ = new TreeNode(lineno, NODE_EXPR); $$->optype = OP_TAILSS; $$->addChild($1);}
-| LOP_NOT expr {$$ = new TreeNode(lineno, NODE_EXPR); $$->optype = OP_NOT; $$->addChild($2);/*逻辑非*/}
+| LOP_NOT expr {$$ = new TreeNode(lineno, NODE_EXPR); $$->optype = OP_NOT; $$->addChild($2); $2->typeCheck(TYPE_BOOL); $$->type = TYPE_BOOL;/*逻辑非*/}
 | LOP_LAB expr {$$ = new TreeNode(lineno, NODE_EXPR); $$->optype = OP_GETADDR; $$->addChild($2);/*取地址*/}
 | LOP_PLUS expr {$$ = new TreeNode(lineno, NODE_EXPR); $$->optype = OP_UNARYP; $$->addChild($2);/*一元取正*/}
 | LOP_SUB expr {$$ = new TreeNode(lineno, NODE_EXPR); $$->optype = OP_UNARYS; $$->addChild($2);/*一元取负*/}
@@ -118,76 +121,67 @@ expr
                       $$->addChild($1); $$->addChild($3);}
 | expr LOP_DIV expr {$$ = new TreeNode(lineno, NODE_EXPR); 
                      $$->optype = OP_DIV;
-                     $$->addChild($1); 
-                     $$->addChild($3);}
+                     $$->addChild($1); $$->addChild($3);}
 | expr LOP_MOD expr {$$ = new TreeNode(lineno, NODE_EXPR); 
                      $$->optype = OP_MOD;
-                     $$->addChild($1); 
-                     $$->addChild($3);}
+                     $$->addChild($1); $$->addChild($3);}
 | expr LOP_PLUS expr {$$ = new TreeNode(lineno, NODE_EXPR); 
                      $$->optype = OP_PLUS;
-                     $$->addChild($1); 
-                     $$->addChild($3);}
+                     $$->addChild($1); $$->addChild($3);}
 | expr LOP_SUB expr {$$ = new TreeNode(lineno, NODE_EXPR); 
                      $$->optype = OP_SUB;
-                     $$->addChild($1); 
-                     $$->addChild($3);}
+                     $$->addChild($1); $$->addChild($3);}
 | expr LOP_G expr {$$ = new TreeNode(lineno, NODE_EXPR); 
                    $$->optype = OP_G;
-                   $$->addChild($1); 
-                   $$->addChild($3);}
+                   $$->addChild($1); $$->addChild($3);
+                   $$->type = TYPE_BOOL;}
 | expr LOP_L expr {$$ = new TreeNode(lineno, NODE_EXPR); 
                    $$->optype = OP_L;
-                   $$->addChild($1); 
-                   $$->addChild($3);}
+                   $$->addChild($1); $$->addChild($3);
+                   $$->type = TYPE_BOOL;}
 | expr LOP_GEQ expr {$$ = new TreeNode(lineno, NODE_EXPR); 
                      $$->optype = OP_GEQ;
                      $$->addChild($1); 
-                     $$->addChild($3);}
+                     $$->addChild($3);
+                     $$->type = TYPE_BOOL;}
 | expr LOP_LEQ expr {$$ = new TreeNode(lineno, NODE_EXPR); 
                      $$->optype = OP_LEQ;
-                     $$->addChild($1); 
-                     $$->addChild($3);}
+                     $$->addChild($1); $$->addChild($3);
+                     $$->type = TYPE_BOOL;}
 | expr LOP_EQ expr {$$ = new TreeNode(lineno, NODE_EXPR); 
                     $$->optype = OP_EQ;
-                    $$->addChild($1); 
-                    $$->addChild($3);}
+                    $$->addChild($1); $$->addChild($3);
+                    $$->type = TYPE_BOOL;}
 | expr LOP_NEQ expr {$$ = new TreeNode(lineno, NODE_EXPR); 
                      $$->optype = OP_NEQ;
-                     $$->addChild($1); 
-                     $$->addChild($3);}
+                     $$->addChild($1); $$->addChild($3);
+                     $$->type = TYPE_BOOL;}
 | expr LOP_PLUSEQ expr {$$ = new TreeNode(lineno, NODE_EXPR); 
                         $$->optype = OP_PLUSEQ;
-                        $$->addChild($1); 
-                        $$->addChild($3);}
+                        $$->addChild($1); $$->addChild($3);}
 | expr LOP_SUBEQ expr {$$ = new TreeNode(lineno, NODE_EXPR); 
                        $$->optype = OP_SUBEQ;
-                       $$->addChild($1); 
-                       $$->addChild($3);}
+                       $$->addChild($1); $$->addChild($3);}
 | expr LOP_MULTEQ expr {$$ = new TreeNode(lineno, NODE_EXPR); 
                         $$->optype = OP_MULTEQ;
-                        $$->addChild($1); 
-                        $$->addChild($3);}
+                        $$->addChild($1); $$->addChild($3);}
 | expr LOP_DIVEQ expr {$$ = new TreeNode(lineno, NODE_EXPR); 
                        $$->optype = OP_DIVEQ;
-                       $$->addChild($1); 
-                       $$->addChild($3);}
+                       $$->addChild($1); $$->addChild($3);}
 | expr LOP_MODEQ expr {$$ = new TreeNode(lineno, NODE_EXPR); 
                        $$->optype = OP_MODEQ;
-                       $$->addChild($1); 
-                       $$->addChild($3);}
+                       $$->addChild($1); $$->addChild($3);}
 | expr LOP_AND expr {$$ = new TreeNode(lineno, NODE_EXPR); 
                      $$->optype = OP_AND;
-                     $$->addChild($1); 
-                     $$->addChild($3);}
+                     $$->addChild($1); $$->addChild($3);
+                     $$->type = TYPE_BOOL;}
 | expr LOP_OR expr {$$ = new TreeNode(lineno, NODE_EXPR); 
                     $$->optype = OP_OR;
-                    $$->addChild($1); 
-                    $$->addChild($3);}
+                    $$->addChild($1); $$->addChild($3);
+                    $$->type = TYPE_BOOL;}
 | expr LOP_ASSIGN expr {$$ = new TreeNode(lineno, NODE_EXPR); 
                         $$->optype = OP_ASSIGN;
-                        $$->addChild($1); 
-                        $$->addChild($3);}
+                        $$->addChild($1); $$->addChild($3);}
 ;
 
 VALUE
@@ -196,6 +190,16 @@ VALUE
     struct Symbol * symbol = progYields.ifExists($$->yield_offset, $$->var_name, NULL);
     if (symbol != NULL){
         $$->symbol_p = symbol;
+    }
+    else {
+        /*变量未声明*/
+        char * mess = (char*)malloc(512);
+        memset(mess, 0, 512);
+        strcpy(mess, $$->var_name.data());
+        strcat(mess, " is not declared");
+        yyerror(mess);
+        free(mess);
+        exit(1);
     }
 }
 | INTEGER {

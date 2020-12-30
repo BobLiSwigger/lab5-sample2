@@ -6,6 +6,7 @@
 #include "utility.h"
 
 struct Symbol{
+    /*符号*/
 public:
     uint32_t ID;
     std::string name;
@@ -13,6 +14,7 @@ public:
 };
 
 struct yieldNode{
+    /*作用域节点*/
 public:
     int father;
     struct Symbol * symbols;
@@ -21,6 +23,7 @@ public:
 };
 
 struct Yields{
+    /*程序所有的作用域*/
 public:
     std::vector<struct yieldNode> yields;
 public:
@@ -91,14 +94,14 @@ enum StmtType {
     STMT_SCANF
 };
 
-struct TreeNode {
+class TreeNode {
 public:
     int nodeID;  // 用于作业的序号输出
-    int lineno;
+    int lineno;  // 行号
     NodeType nodeType;
 
-    TreeNode* child = nullptr;
-    TreeNode* sibling = nullptr;
+    TreeNode* child = NULL;   // 孩子
+    TreeNode* sibling = NULL; // 兄弟
 
     void addChild(TreeNode*);
     void addSibling(TreeNode*);
@@ -107,10 +110,11 @@ public:
     void printChildrenId();
 
     void printAST(); // 先输出自己 + 孩子们的id；再依次让每个孩子输出AST。
-    void printSpecialInfo();
+    void printSpecialInfo(); // 输出一些特殊的定西
 
-    int genNodeId(int startID);
-
+    int genNodeId(int startID); // 生成节点的ID
+    int allocTypeForDECL(Type*); // 为声明语句的语法分析树中ID分配类型
+    int typeCheck(Type*); // 为该节点执行类型检查
 public:
     OperatorType optype;  // 如果是表达式
     Type* type;  // 变量、类型、表达式结点，有类型。

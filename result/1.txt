@@ -46,8 +46,8 @@ lno@13	@44	expr	%	children: [@45 @46 ]
 lno@13	@45	vari	a	ID 3	
 lno@13	@46	const	100	
 lno@13	@47	const	10	
-lno@13	@48	expr	==	children: [@49 @51 ]
-lno@13	@49	expr	!	children: [@50 ]
+lno@13	@48	expr	!	children: [@49 ]
+lno@13	@49	expr	==	children: [@50 @51 ]
 lno@13	@50	vari	a	ID 3	
 lno@13	@51	const	10	
 lno@14	@52	expr	-=	children: [@53 @54 ]

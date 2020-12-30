@@ -10,8 +10,8 @@ lno@3	@8	expr	=	children: [@9 @10 ]
 lno@3	@9	vari	b	ID 1	
 lno@3	@10	const	2	
 lno@7	@11	stmt	if	children: [@12 @16 @21 ]
-lno@4	@12	expr	==	children: [@13 @15 ]
-lno@4	@13	expr	!	children: [@14 ]
+lno@4	@12	expr	!	children: [@13 ]
+lno@4	@13	expr	==	children: [@14 @15 ]
 lno@4	@14	const	2	
 lno@4	@15	const	3	
 lno@5	@16	stmt	declration	children: [@17 @18 ]
